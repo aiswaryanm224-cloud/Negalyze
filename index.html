@@ -1,11 +1,79 @@
-~<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Negalyze Terminal Bot</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #00ffcc;
+            font-family: monospace;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 15px;
+            background: #161b22;
+            color: #1e90ff;
+        }
+
+        #terminal {
+            padding: 20px;
+            height: 70vh;
+            overflow-y: auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: #161b22;
+            color: #00ffcc;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h1></h1>
+
+<h1>NEGALYZE | Terminal Bot (Claude Inspired)</h1>
+
+<div id="terminal">
+    <p>Welcome to Negalyze Cloud Terminal.</p>
+    <p>Type 'help' to start.</p>
+</div>
+
+<input type="text" id="commandInput" placeholder="Type command and press Enter">
+
+<script>
+    const input = document.getElementById("commandInput");
+    const terminal = document.getElementById("terminal");
+
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            const command = input.value;
+            terminal.innerHTML += "<p>> " + command + "</p>";
+
+            let response = "";
+
+            if (command === "help") {
+                response = "Commands: help, about, analyze";
+            }
+            else if (command === "about") {
+                response = "Negalyze is a cloud terminal bot inspired by Claude AI.";
+            }
+            else if (command.startsWith("analyze")) {
+                response = "Analyzing input... (Simulated Claude Response)";
+            }
+            else {
+                response = "Unknown command.";
+            }
+
+            terminal.innerHTML += "<p>" + response + "</p>";
+            input.value = "";
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+    });
+</script>
+
 </body>
 </html>
