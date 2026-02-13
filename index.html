@@ -1,74 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Negalyze Terminal Bot</title>
+    <meta charset="UTF-8">
+    <title>Negalyze | Cloud Terminal Bot</title>
+
     <style>
         body {
-            background-color: #0d1117;
-            color: #00ffcc;
-            font-family: monospace;
             margin: 0;
+            background-color: #0d1117;
+            font-family: Consolas, monospace;
+            color: #00ffcc;
         }
 
-        h1 {
-            text-align: center;
-            padding: 15px;
+        header {
             background: #161b22;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
             color: #1e90ff;
+            letter-spacing: 2px;
         }
 
         #terminal {
             padding: 20px;
-            height: 70vh;
+            height: 75vh;
             overflow-y: auto;
         }
 
-        input {
+        .input-area {
+            position: fixed;
+            bottom: 0;
             width: 100%;
-            padding: 15px;
-            border: none;
             background: #161b22;
+            padding: 10px;
+        }
+
+        input {
+            width: 95%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            outline: none;
             color: #00ffcc;
             font-size: 16px;
+        }
+
+        .response {
+            color: white;
         }
     </style>
 </head>
 <body>
 
-<h1>NEGALYZE | Terminal Bot (Claude Inspired)</h1>
+<header>
+    NEGALYZE | Terminal Bot (Claude Inspired)
+</header>
 
 <div id="terminal">
     <p>Welcome to Negalyze Cloud Terminal.</p>
-    <p>Type 'help' to start.</p>
+    <p>Type 'help' to see available commands.</p>
 </div>
 
-<input type="text" id="commandInput" placeholder="Type command and press Enter">
+<div class="input-area">
+    <input type="text" id="commandInput" placeholder="Negalyze > Type command and press Enter">
+</div>
 
 <script>
     const input = document.getElementById("commandInput");
     const terminal = document.getElementById("terminal");
 
-    input.addEventListener("keypress", function(event) {
+    input.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
-            const command = input.value;
+
+            const command = input.value.trim();
+            if (command === "") return;
+
             terminal.innerHTML += "<p>> " + command + "</p>";
 
             let response = "";
 
             if (command === "help") {
-                response = "Commands: help, about, analyze";
+                response = "Available commands: help, about, analyze <text>, clear, version";
             }
             else if (command === "about") {
-                response = "Negalyze is a cloud terminal bot inspired by Claude AI.";
+                response = "Negalyze is a cloud-based terminal bot inspired by Claude AI. Designed for intelligent command simulation.";
             }
             else if (command.startsWith("analyze")) {
-                response = "Analyzing input... (Simulated Claude Response)";
+                const text = command.replace("analyze", "").trim();
+
+                if (text.length < 5) {
+                    response = "Analysis Result: Input too short. Please provide more details.";
+                } else {
+                    response = "Analysis Result: The input shows structured intent and moderate complexity. (Simulated Claude Output)";
+                }
+            }
+            else if (command === "version") {
+                response = "Negalyze v1.0 | Hackathon Build";
+            }
+            else if (command === "clear") {
+                terminal.innerHTML = "";
+                input.value = "";
+                return;
             }
             else {
-                response = "Unknown command.";
+                response = "Command not recognized. Type 'help'.";
             }
 
-            terminal.innerHTML += "<p>" + response + "</p>";
+            terminal.innerHTML += "<p class='response'>" + response + "</p>";
             input.value = "";
             terminal.scrollTop = terminal.scrollHeight;
         }
