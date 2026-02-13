@@ -2,14 +2,18 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import multer from "multer";
+import fs from "fs";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
-// OpenRouter configuration
+// ---------- FILE UPLOAD SETUP ----------
+const upload = multer({ dest: "uploads/" });
+
+// ---------- OPENROUTER CONFIG ----------
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   baseURL: "https://openrouter.ai/api/v1",
@@ -19,53 +23,61 @@ const openai = new OpenAI({
   },
 });
 
-// Test route (prevents 404 on root)
+// ---------- ROOT TEST ----------
 app.get("/", (req, res) => {
   res.send("🚀 Negalyze Backend Running");
 });
 
-// Main API route
-app.post("/analyze", async (req, res) => {
+// ---------- ANALYZE ROUTE ----------
+app.post("/analyze", upload.single("file"), async (req, res) => {
   try {
-    const { text, harshness } = req.body;
-
-    if (!text || text.trim() === "") {
-      return res.status(400).json({ result: "No project text provided." });
-    }
+    const text = req.body.text || "";
+    const harshness = req.body.harshness || "normal";
 
     let tone = "";
-    if (harshness === "normal") {
-      tone = "Give polite criticism.";
-    } else if (harshness === "medium") {
-      tone = "Be strict and clearly highlight weaknesses.";
-    } else {
-      tone = "Reject the project harshly and list only mistakes.";
+    if (harshness === "normal") tone = "Give polite criticism.";
+    else if (harshness === "medium") tone = "Be strict and highlight weaknesses.";
+    else tone = "Reject harshly and list only problems.";
+
+    let fileContent = "";
+
+    if (req.file) {
+      fileContent = `User uploaded a file named ${req.file.originalname}`;
+      fs.unlinkSync(req.file.path); // cleanup uploaded file
     }
 
+    const prompt = `
+${tone}
+
+Analyze this project and find weaknesses:
+
+TEXT CONTENT:
+${text}
+
+FILE INFO:
+${fileContent}
+`;
+
     const response = await openai.chat.completions.create({
-      model: "mistralai/mistral-7b-instruct",  // Safe OpenRouter model
+      model: "mistralai/mistral-7b-instruct",
       messages: [
         {
           role: "system",
-          content:
-            "You are NEGALYZE AI. You ONLY point out negatives and problems. Never praise.",
+          content: "You are NEGALYZE AI. Only point out negatives. No praise.",
         },
         {
           role: "user",
-          content: `${tone}\n\nAnalyze this project:\n${text}`,
+          content: prompt,
         },
       ],
-      temperature: 0.7,
     });
 
-    res.json({
-      result: response.choices[0].message.content,
-    });
+    res.json({ result: response.choices[0].message.content });
 
   } catch (error) {
-    console.error("OpenRouter Error:", error.response?.data || error.message);
+    console.error(error);
     res.status(500).json({
-      result: "⚠ OpenRouter error. Check API key or credits.",
+      result: "⚠ Server error. Check backend console.",
     });
   }
 });
