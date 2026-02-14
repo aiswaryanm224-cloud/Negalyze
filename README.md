@@ -2,27 +2,27 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# [Project Name] 🎯
+# [Negalyze] 🎯
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: [ENCODED]
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: [Aiswarya N M] - [LBSITW]
+- Member 2: [Keerthana Reji] - [LBSITW]
 
 ### Hosted Project Link
 [mention your project hosted link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+[the app uses AI ti analyze uploaded projects and find only mistakes and weaknesses it gives feedback in different harsh level to improve projects]
 
 ### The Problem statement
-[What problem are you solving?]
+[projects often lacks criticalevaluation ,making it hard to identify .an AI systemis needed to detect mistakes and quality before submission]
 
 ### The Solution
-[How are you solving it?]
+we solve the problem using an AI powered system that analyses uploaded projects , detects weaknesses and provide critical feedback based on selected harshness level to help users to improve their work ]
 
 ---
 
@@ -31,10 +31,10 @@
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
+- Languages used: [javascript,HTML ,CSS]
+- Frameworks used: [react,node]
+- Libraries used: [react.js,node.js,openAI API]
+- Tools used: [vs code]
 
 **For Hardware:**
 - Main components: [List main components]
@@ -46,10 +46,10 @@
 ## Features
 
 List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
-- Feature 3: [Description]
-- Feature 4: [Description]
+- Feature 1: [AI based project analysis]
+- Feature 2: [Harshness level]
+- Feature 3: [File upload support]
+- Feature 4: [Negative only feedback system]
 
 ---
 
